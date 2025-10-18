@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Hangarin | Task List{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm border-0">
+  <div class="card-body">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h4 class="fw-bold mb-0">All Tasks</h4>
+      <a href="{% url 'task-add' %}" class="btn btn-primary btn-sm">
+        <i class="ti ti-plus"></i> Add Task
+      </a>
+    </div>
+
+    <!-- Search and Sorting -->
+    <form method="get" class="mb-4">
+      <div class="row g-2 align-items-center">
+        <div class="col-md-5">
+          <input
+            type="text"
+            name="q"
+            value="{{ request.GET.q }}"
+            class="form-control"
+            placeholder="Search tasks..."
+          />
+        </div>
+        <div class="col-md-3">
+          <select class="form-select" name="sort_by">
+            <option value="deadline" {% if request.GET.sort_by == "deadline" %}selected{% endif %}>Deadline</option>
+            <option value="title" {% if request.GET.sort_by == "title" %}selected{% endif %}>Title</option>
+            <option value="priority__name" {% if request.GET.sort_by == "priority__name" %}selected{% endif %}>Priority</option>
+            <option value="category__name" {% if request.GET.sort_by == "category__name" %}selected{% endif %}>Category</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <button type="submit" class="btn btn-primary w-100">Search</button>
+        </div>
+        <div class="col-md-2">
+          <a href="{% url 'task-list' %}" class="btn btn-outline-secondary w-100">Clear</a>
+        </div>
+      </div>
+
+      <!-- Filters Below -->
+      <div class="row g-2 align-items-center mt-3">
+        <div class="col-md-3">
+          <select name="status" class="form-select">
+            <option value="">All Status</option>
+            <option value="pending" {% if request.GET.status == "pending" %}selected{% endif %}>Pending</option>
+            <option value="in_progress" {% if request.GET.status == "in_progress" %}selected{% endif %}>In Progress</option>
+            <option value="completed" {% if request.GET.status == "completed" %}selected{% endif %}>Completed</option>
+          </select>
+        </div>
+
+        <div class="col-md-3">
+          <select name="priority" class="form-select">
+            <option value="">All Priorities</option>
+            {% for priority in priorities %}
+              <option value="{{ priority.id }}" {% if request.GET.priority == priority.id|stringformat:"s" %}selected{% endif %}>
+                {{ priority.name }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="col-md-3">
+          <select name="category" class="form-select">
+            <option value="">All Categories</option>
+            {% for category in categories %}
+              <option value="{{ category.id }}" {% if request.GET.category == category.id|stringformat:"s" %}selected{% endif %}>
+                {{ category.name }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="col-md-3">
+          <input type="date" name="deadline_before" value="{{ request.GET.deadline_before }}" class="form-control" placeholder="Before deadline">
+        </div>
+      </div>
+    </form>
+
+    <!-- Table -->
+    <div class="table-responsive">
+      <table class="table table-hover align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Priority</th>
+            <th>Status</th>
+            <th>Deadline</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for task in tasks %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td class="fw-semibold">{{ task.title }}</td>
+            <td>{{ task.category.name }}</td>
+            <td>{{ task.priority.name }}</td>
+            <td>
+              {% if task.status == 'completed' %}
+                <span class="badge bg-success">Completed</span>
+              {% elif task.status == 'in_progress' %}
+                <span class="badge bg-warning text-dark">In Progress</span>
+              {% else %}
+                <span class="badge bg-secondary">Pending</span>
+              {% endif %}
+            </td>
+            <td>{{ task.deadline|date:"M d, Y H:i" }}</td>
+            <td>
+              <a href="{% url 'task-edit' task.id %}" class="btn btn-sm btn-warning">
+                <i class="ti ti-edit"></i>
+              </a>
+              <a href="{% url 'task-delete' task.id %}" class="btn btn-sm btn-danger">
+                <i class="ti ti-trash"></i>
+              </a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="7" class="text-center text-muted py-4">No tasks found.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="d-flex justify-content-between align-items-center mt-3">
+      <p class="text-muted mb-0">
+        Showing page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+      </p>
+
+      <nav>
+        <ul class="pagination pagination-sm mb-0">
+          {% if page_obj.has_previous %}
+            <li class="page-item">
+              <a class="page-link" href="?page=1&{{ request.GET.urlencode }}">&laquo;</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="?page={{ page_obj.previous_page_number }}&{{ request.GET.urlencode }}">Prev</a>
+            </li>
+          {% else %}
+            <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+            <li class="page-item disabled"><span class="page-link">Prev</span></li>
+          {% endif %}
+
+          {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+              <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ num }}&{{ request.GET.urlencode }}">{{ num }}</a>
+              </li>
+            {% endif %}
+          {% endfor %}
+
+          {% if page_obj.has_next %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ page_obj.next_page_number }}&{{ request.GET.urlencode }}">Next</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}&{{ request.GET.urlencode }}">&raquo;</a>
+            </li>
+          {% else %}
+            <li class="page-item disabled"><span class="page-link">Next</span></li>
+            <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+{% endblock %}
