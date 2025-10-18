@@ -13,7 +13,7 @@ from django import forms
 # --------------------------
 
 class DashboardView(TemplateView):
-    template_name = "dashboard.html"
+    template_name = 'dashboard.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -111,7 +111,7 @@ class TaskDeleteView(DeleteView):
 # --------------------------
 class CategoryListView(ListView):
     model = Category
-    template_name = 'category_list.html'
+    template_name = 'Category_List.html'
     context_object_name = 'categories'
     paginate_by = 20  # Adjust as needed
 
