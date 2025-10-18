@@ -6,37 +6,22 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}Hangarin{% endblock %}</title>
+
+  <!-- Favicon -->
   <link rel="shortcut icon" type="image/png" href="{% static 'images/logos/favicon.png' %}">
+
+  <!-- Icons (Tabler + Iconify) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.8/dist/iconify-icon.min.js"></script>
+
+  <!-- Core Styles -->
   <link rel="stylesheet" href="{% static 'css/styles.min.css' %}">
 </head>
 
 <body>
   <!-- Body Wrapper -->
-  <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
-    data-sidebar-position="fixed" data-header-position="fixed">
-
-    <!-- Topstrip -->
-    <div class="app-topstrip bg-dark py-6 px-3 w-100 d-lg-flex align-items-center justify-content-between">
-      <div class="d-flex align-items-center justify-content-center gap-5 mb-2 mb-lg-0">
-        <a class="d-flex justify-content-center" href="#">
-          <img src="{% static 'images/logos/logo-wrappixel.svg' %}" alt="" width="150">
-        </a>
-      </div>
-
-      <div class="d-lg-flex align-items-center gap-2">
-        <h3 class="text-white mb-2 mb-lg-0 fs-5 text-center">Check Flexy Premium Version</h3>
-        <div class="d-flex align-items-center justify-content-center gap-2">
-          <div class="dropdown d-flex">
-            <a class="btn btn-primary d-flex align-items-center gap-1" href="javascript:void(0)" id="drop4"
-              data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="ti ti-shopping-cart fs-5"></i>
-              Buy Now
-              <i class="ti ti-chevron-down fs-5"></i>
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
+  <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6"
+    data-sidebartype="full" data-sidebar-position="static" data-header-position="static">
 
     <!-- Sidebar -->
     <aside class="left-sidebar">
@@ -50,7 +35,7 @@
           </div>
         </div>
 
-        <!-- Sidebar navigation -->
+        <!-- Sidebar Navigation -->
         <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
           <ul id="sidebarnav">
             <li class="nav-small-cap">
@@ -71,73 +56,102 @@
                 <span class="hide-menu">Categories</span>
               </a>
             </li>
+
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="{% url 'task-list' %}">
+                    <i class="ti ti-list-check"></i>
+                    <span class="hide-menu">Tasks</span>
+                </a>
+            </li>
+
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="{% url 'subtask-list' %}">
+                    <i class="ti ti-subtask"></i>
+                    <span class="hide-menu">Subtasks</span>
+                </a>
+            </li>
+
+            <!-- Add other sections here -->
           </ul>
         </nav>
       </div>
     </aside>
     <!-- End Sidebar -->
 
-    <!-- Main wrapper -->
+    <!-- Main Content -->
     <div class="body-wrapper">
       <!-- Header -->
-      <header class="app-header">
-        <nav class="navbar navbar-expand-lg navbar-light">
-          <ul class="navbar-nav">
-            <li class="nav-item d-block d-xl-none">
-              <a class="nav-link sidebartoggler" id="headerCollapse" href="javascript:void(0)">
-                <i class="ti ti-menu-2"></i>
-              </a>
+    <header class="app-header shadow-sm bg-white border-bottom">
+        <nav class="navbar navbar-expand-lg navbar-light justify-content-between px-3">
+            <!-- Sidebar Toggle (Mobile Only) -->
+            <div class="d-flex align-items-center">
+            <a class="nav-link sidebartoggler d-xl-none" id="headerCollapse" href="javascript:void(0)">
+                <i class="ti ti-menu-2 fs-5"></i>
+            </a>
+            <span class="fw-semibold ms-2 d-none d-sm-inline">Hangarin</span>
+            </div>
+
+            <!-- Right Section: User Profile / Settings -->
+            <ul class="navbar-nav flex-row align-items-center mb-0">
+            <!-- (Optional) Add quick actions here, e.g. search, notifications -->
+            <!--
+            <li class="nav-item me-2">
+                <a class="nav-link" href="#"><i class="ti ti-bell"></i></a>
             </li>
-          </ul>
-          <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
-            <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
-              <li class="nav-item dropdown">
-                <a class="nav-link" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown" aria-expanded="false">
-                  <img src="{% static 'images/profile/user-1.jpg' %}" alt="Profile" width="35" height="35"
-                    class="rounded-circle">
+            -->
+
+            <li class="nav-item dropdown">
+                <a class="nav-link d-flex align-items-center" href="#" id="userDropdown" role="button"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="{% static 'images/profile/user-1.jpg' %}" alt="Profile" width="35" height="35"
+                    class="rounded-circle me-2">
+                <span class="fw-semibold d-none d-lg-inline">Account</span>
                 </a>
-                <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
-                  <div class="message-body">
-                    <a href="#" class="d-flex align-items-center gap-2 dropdown-item">
-                      <i class="ti ti-user fs-6"></i>
-                      <p class="mb-0 fs-3">My Profile</p>
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="userDropdown">
+                <li>
+                    <a class="dropdown-item d-flex align-items-center gap-2" href="#">
+                    <i class="ti ti-user"></i> Profile
                     </a>
-                    <a href="#" class="d-flex align-items-center gap-2 dropdown-item">
-                      <i class="ti ti-mail fs-6"></i>
-                      <p class="mb-0 fs-3">My Account</p>
+                </li>
+                <li>
+                    <a class="dropdown-item d-flex align-items-center gap-2" href="#">
+                    <i class="ti ti-mail"></i> My Account
                     </a>
-                    <a href="#" class="d-flex align-items-center gap-2 dropdown-item">
-                      <i class="ti ti-list-check fs-6"></i>
-                      <p class="mb-0 fs-3">My Tasks</p>
+                </li>
+                <li>
+                    <a class="dropdown-item d-flex align-items-center gap-2" href="#">
+                    <i class="ti ti-list-check"></i> My Tasks
                     </a>
-                    <-- <a href= class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a> -->
-                  </div>
-                </div>
-              </li>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                    <a class="dropdown-item text-danger fw-semibold d-flex align-items-center gap-2" href="#">
+                    <i class="ti ti-logout"></i> Logout
+                    </a>
+                </li>
+                </ul>
+            </li>
             </ul>
-          </div>
         </nav>
       </header>
       <!-- Header End -->
 
-      <!-- Body content -->
-      <div class="body-wrapper-inner py-4 px-3">
-        <div class="container-fluid">
+      <!-- Page Content -->
+      <main class="body-wrapper-inner px-3 pb-4" style="padding-top: 80px;">
+        <div class="container-fluid p-0">
           {% block content %}
           {% endblock %}
         </div>
-      </div>
-      <!-- End Body content -->
+      </main>
+      <!-- End Page Content -->
     </div>
   </div>
 
-  <!-- Scripts -->
+  <!-- JS Files -->
   <script src="{% static 'libs/jquery/dist/jquery.min.js' %}"></script>
   <script src="{% static 'libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'libs/simplebar/dist/simplebar.js' %}"></script>
   <script src="{% static 'js/sidebarmenu.js' %}"></script>
   <script src="{% static 'js/app.min.js' %}"></script>
-  <script src="{% static 'libs/simplebar/dist/simplebar.js' %}"></script>
-  <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.8/dist/iconify-icon.min.js"></script>
 </body>
-
 </html>
