@@ -15,12 +15,13 @@
   <style>
     :root {
       --sidebar-width: 250px;
-      --sidebar-inner-gutter: 18px; /* matches your sidebar link padding */
-      --content-max: 1200px;        /* maximum width of the center column */
-      --page-gap: 24px;             /* vertical breathing space */
+      --sidebar-gutter: 18px;
+      --content-max: 1200px;
+      --page-gap: 24px;
     }
 
-    html, body {
+    html,
+    body {
       margin: 0;
       height: 100%;
       background: #f8fafc;
@@ -28,15 +29,15 @@
       color: #111827;
     }
 
-    /* Page frame */
+    /* page frame */
     .page-wrapper {
       display: flex;
       min-height: 100vh;
-      overflow-x: hidden;
       width: 100%;
+      overflow-x: hidden;
     }
 
-    /* Sidebar */
+    /* sidebar */
     .left-sidebar {
       position: fixed;
       top: 0;
@@ -52,35 +53,59 @@
       transition: transform .28s ease;
     }
 
-    .left-sidebar .brand-logo {
-      padding: 18px var(--sidebar-inner-gutter);
+    .brand-logo {
+      padding: 18px var(--sidebar-gutter);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #e5e7eb;
     }
 
     .sidebar-nav {
       flex: 1;
       overflow-y: auto;
-      padding-top: 6px;
+      padding: 12px var(--sidebar-gutter);
+    }
+
+    .nav-small-cap {
+      font-size: .75rem;
+      color: #94a3b8;
+      font-weight: 600;
+      margin-bottom: .5rem;
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+      text-transform: uppercase;
+    }
+
+    .sidebar-item {
+      margin-bottom: 6px;
     }
 
     .sidebar-item a {
       display: flex;
       align-items: center;
       gap: .6rem;
-      padding: 10px var(--sidebar-inner-gutter);
+      padding: 10px 12px;
       color: #111827;
       text-decoration: none;
-      border-radius: 6px;
+      border-radius: 8px;
+      transition: background .15s, color .15s;
     }
 
     .sidebar-item a:hover,
-    .sidebar-item a.active { background: #f1f5f9; }
+    .sidebar-item a.active {
+      background: #f1f5f9;
+      color: #1e293b;
+      font-weight: 600;
+    }
 
     .sidebar-footer {
       border-top: 1px solid #e5e7eb;
-      padding: 12px var(--sidebar-inner-gutter);
+      padding: 12px var(--sidebar-gutter);
     }
 
-    /* Body / content column (to the right of the sidebar) */
+    /* body wrapper */
     .body-wrapper {
       margin-left: var(--sidebar-width);
       flex: 1;
@@ -91,7 +116,7 @@
       transition: margin-left .28s ease;
     }
 
-    /* Mobile header (keeps hamburger) */
+    /* mobile header */
     .mobile-header {
       display: none;
       align-items: center;
@@ -105,108 +130,171 @@
       z-index: 1020;
     }
 
-    /* Main content area (scrolls) */
     main {
       flex: 1;
       overflow-y: auto;
-      padding: var(--page-gap) 0; /* vertical breathing - horizontal controlled by content-inner */
+      padding: var(--page-gap) 0;
       -webkit-overflow-scrolling: touch;
     }
 
-    /* The content inner column — this is the important part for alignment */
     .content-inner {
       width: 100%;
       max-width: var(--content-max);
-      margin-left: calc(var(--sidebar-inner-gutter) + 8px); /* line up with sidebar links visually */
+      margin-left: calc(var(--sidebar-gutter) + 8px);
       margin-right: 2rem;
-      padding-left: 0;
-      padding-right: 0;
+      padding: 0;
     }
 
-    /* Make the content sit centered in the available right-space on wider screens */
-    @media (min-width: 1400px) {
-      .content-inner { margin-left: calc((100% - var(--content-max)) / 2); }
+    /* keep desktop dashboard spacing identical to what you had */
+    @media (min-width: 992px) {
+      .content-inner {
+        margin-left: calc(var(--sidebar-gutter) + 8px);
+      }
     }
 
-    /* Remove container-fluid top spacing from child pages so alignment is consistent */
-    .content-inner .container-fluid,
-    .content-inner .container {
-      padding-top: 0 !important;
-      margin-top: 0 !important;
-    }
+    @media (max-width:991.98px) {
+      :root {
+        --sidebar-width: 0;
+      }
 
-    /* Tighter default headings spacing to avoid extra gaps */
-    .content-inner h1, .content-inner h2, .content-inner h3, .content-inner h4, .content-inner h5 {
-      margin-top: 0;
-    }
+      .left-sidebar {
+        transform: translateX(-100%);
+        position: fixed;
+      }
 
-    /* Responsive behaviour */
-    @media (max-width: 991.98px) {
-      :root { --sidebar-width: 0px; }
-      .left-sidebar { transform: translateX(-100%); position: fixed; }
-      .left-sidebar.show { transform: translateX(0); }
-      .body-wrapper { margin-left: 0; }
-      .mobile-header { display: flex; }
-      .content-inner { margin-left: 1rem; margin-right: 1rem; max-width: none; }
-      main { padding: 0.75rem 0; }
+      .left-sidebar.show {
+        transform: translateX(0);
+      }
+
+      .body-wrapper {
+        margin-left: 0;
+      }
+
+      .mobile-header {
+        display: flex;
+      }
+
+      .content-inner {
+        margin-left: 1rem;
+        margin-right: 1rem;
+        max-width: none;
+      }
+
+      main {
+        padding: 0.75rem 0;
+      }
     }
   </style>
 </head>
 
 <body>
   <div class="page-wrapper">
-    <!-- Sidebar -->
+    <!-- SIDEBAR -->
     <aside class="left-sidebar" id="sidebarMenu">
-      <div class="brand-logo d-flex align-items-center justify-content-between p-0 border-bottom">
-        <a href="{% url 'dashboard' %}" class="text-nowrap logo-img" style="display:flex; align-items:center; gap:.6rem; padding:18px var(--sidebar-inner-gutter);">
+      <div class="brand-logo">
+        <a href="{% url 'dashboard' %}" class="d-flex align-items-center" style="gap:.6rem;">
           <img src="{% static 'images/logos/logo.svg' %}" alt="Logo" height="28">
-          <!-- optional brand text can be hidden if you want compact look -->
         </a>
-        <button class="btn btn-sm d-lg-none" id="closeSidebar" type="button" style="margin-right:8px;">
+        <button class="btn btn-sm d-lg-none" id="closeSidebar" type="button" aria-label="Close sidebar">
           <i class="ti ti-x"></i>
         </button>
       </div>
 
-      <nav class="sidebar-nav mt-2">
+      <nav class="sidebar-nav" aria-label="Main navigation">
+        <div class="nav-small-cap">
+          <iconify-icon icon="solar:menu-dots-linear" class="fs-4"></iconify-icon>
+          Main
+        </div>
+
         <ul class="list-unstyled mb-0">
-          <li class="nav-small-cap px-3 mb-2 text-uppercase text-muted small fw-semibold">
-            <iconify-icon icon="solar:menu-dots-linear" class="me-2 fs-4"></iconify-icon>
-            Main
+          <li class="sidebar-item">
+            <a href="{% url 'dashboard' %}"
+              class="sidebar-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+              <i class="ti ti-atom"></i> Dashboard
+            </a>
           </li>
 
-          <li class="sidebar-item"><a href="{% url 'dashboard' %}" class="sidebar-link"><i class="ti ti-atom"></i> Dashboard</a></li>
-          <li class="sidebar-item"><a href="{% url 'category-list' %}" class="sidebar-link"><i class="ti ti-list-details"></i> Categories</a></li>
-          <li class="sidebar-item"><a href="{% url 'task-list' %}" class="sidebar-link"><i class="ti ti-list-check"></i> Tasks</a></li>
-          <li class="sidebar-item"><a href="{% url 'subtask-list' %}" class="sidebar-link"><i class="ti ti-subtask"></i> Subtasks</a></li>
+          <li class="sidebar-item">
+            <a href="{% url 'category-list' %}"
+              class="sidebar-link {% if request.resolver_match.url_name == 'category-list' %}active{% endif %}">
+              <i class="ti ti-list-details"></i> Categories
+            </a>
+          </li>
+
+          <li class="sidebar-item">
+            <a href="{% url 'task-list' %}"
+              class="sidebar-link {% if request.resolver_match.url_name == 'task-list' %}active{% endif %}">
+              <i class="ti ti-list-check"></i> Tasks
+            </a>
+          </li>
+
+          <li class="sidebar-item">
+            <a href="{% url 'subtask-list' %}"
+              class="sidebar-link {% if request.resolver_match.url_name == 'subtask-list' %}active{% endif %}">
+              <i class="ti ti-subtask"></i> Subtasks
+            </a>
+          </li>
+
+          <li class="sidebar-item">
+            <a href="{% url 'priority-list' %}"
+              class="sidebar-link {% if request.resolver_match.url_name == 'priority-list' %}active{% endif %}">
+              <i class="ti ti-flag"></i> Priorities
+            </a>
+          </li>
+
+          <li class="sidebar-item">
+            <a href="{% url 'note-list' %}"
+              class="sidebar-link {% if request.resolver_match.url_name == 'note-list' %}active{% endif %}">
+              <i class="ti ti-notes"></i> Notes
+            </a>
+          </li>
         </ul>
       </nav>
 
       <div class="sidebar-footer mt-auto">
         <div class="dropdown w-100">
-          <a href="#" class="d-flex align-items-center text-decoration-none" data-bs-toggle="dropdown" style="padding:8px var(--sidebar-inner-gutter);">
-            <img src="{% static 'images/profile/user-1.jpg' %}" alt="Profile" width="40" height="40" class="rounded-circle me-2">
+          <a href="#" class="d-flex align-items-center text-decoration-none" data-bs-toggle="dropdown"
+            aria-expanded="false" style="padding:8px 0;">
+            <img src="{% static 'images/profile/user-1.jpg' %}" alt="Profile" width="40" height="40"
+              class="rounded-circle me-2">
             <div class="flex-grow-1">
-              <span class="fw-semibold d-block text-dark">Account</span>
+              <span class="fw-semibold d-block text-dark">{{ request.user.username|default:"Account" }}</span>
               <small class="text-muted">Manage</small>
             </div>
             <i class="ti ti-chevron-down ms-auto"></i>
           </a>
+
           <ul class="dropdown-menu dropdown-menu-end mt-2 shadow-sm w-100">
-            <li><a class="dropdown-item" href="#"><i class="ti ti-user"></i> Profile</a></li>
-            <li><a class="dropdown-item" href="#"><i class="ti ti-mail"></i> My Account</a></li>
-            <li><a class="dropdown-item" href="#"><i class="ti ti-list-check"></i> My Tasks</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item text-danger fw-semibold" href="#"><i class="ti ti-logout"></i> Logout</a></li>
+            <!-- Safe links: don't use Django url tags that may not exist -->
+            <li><a class="dropdown-item" href="#" onclick="alert('Profile page not implemented'); return false;"><i
+                  class="ti ti-user"></i> Profile</a></li>
+            <li><a class="dropdown-item" href="#" onclick="alert('Account page not implemented'); return false;"><i
+                  class="ti ti-mail"></i> My Account</a></li>
+            <li><a class="dropdown-item" href="{% url 'task-list' %}"><i class="ti ti-list-check"></i> My Tasks</a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <!-- Secure POST logout for allauth -->
+            <li>
+              <form id="logoutForm" method="post" action="{% url 'account_logout' %}" class="m-0">
+                {% csrf_token %}
+                <button type="submit" class="dropdown-item text-danger fw-semibold"
+                  style="border:0; background:transparent; width:100%; text-align:left;">
+                  <i class="ti ti-logout"></i> Logout
+                </button>
+              </form>
+            </li>
           </ul>
         </div>
       </div>
     </aside>
 
-    <!-- Body -->
+    <!-- BODY -->
     <div class="body-wrapper" id="mainBody">
-      <!-- mobile header with hamburger -->
+      <!-- mobile header (keeps hamburger) -->
       <div class="mobile-header">
-        <button class="navbar-toggler d-lg-none" id="openSidebar">
+        <button class="navbar-toggler d-lg-none" id="openSidebar" aria-label="Open sidebar">
           <i class="ti ti-menu-2"></i>
         </button>
         <h6 class="fw-semibold mb-0">Hangarin</h6>
@@ -230,19 +318,34 @@
       const openBtn = document.getElementById('openSidebar');
       const closeBtn = document.getElementById('closeSidebar');
 
-      openBtn?.addEventListener('click', () => sidebar.classList.add('show'));
+      openBtn?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        sidebar.classList.add('show');
+      });
       closeBtn?.addEventListener('click', () => sidebar.classList.remove('show'));
 
-      // close when clicking outside (mobile)
+      // Auto-close sidebar on mobile after clicking a nav link
+      document.querySelectorAll('.sidebar-link').forEach(link => {
+        link.addEventListener('click', () => {
+          if (window.innerWidth < 992) sidebar.classList.remove('show');
+        });
+      });
+
+      // Also close sidebar when selecting dropdown items (profile/logout)
+      document.querySelectorAll('.dropdown-item').forEach(item => {
+        item.addEventListener('click', () => {
+          if (window.innerWidth < 992) sidebar.classList.remove('show');
+        });
+      });
+
+      // Close sidebar when clicking outside (mobile)
       document.addEventListener('click', (e) => {
         if (window.innerWidth < 992 && sidebar && openBtn && !sidebar.contains(e.target) && !openBtn.contains(e.target)) {
           sidebar.classList.remove('show');
         }
       });
-
-      // optional: expose a small helper to toggle compact sidebar from console
-      window._toggleSidebar = () => sidebar.classList.toggle('hide');
     })();
   </script>
 </body>
+
 </html>
