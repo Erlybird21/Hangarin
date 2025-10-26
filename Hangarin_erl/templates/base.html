@@ -129,27 +129,18 @@
       top: 0;
       z-index: 1020;
     }
-
+    
     main {
       flex: 1;
       overflow-y: auto;
-      padding: var(--page-gap) 0;
+      padding: 1rem 0 var(--page-gap) 0;  /* Smaller top padding */
       -webkit-overflow-scrolling: touch;
     }
-
     .content-inner {
       width: 100%;
       max-width: var(--content-max);
-      margin-left: calc(var(--sidebar-gutter) + 8px);
-      margin-right: 2rem;
-      padding: 0;
-    }
-
-    /* keep desktop dashboard spacing identical to what you had */
-    @media (min-width: 992px) {
-      .content-inner {
-        margin-left: calc(var(--sidebar-gutter) + 8px);
-      }
+      margin: 0 !important;
+      padding: 1.5rem !important;
     }
 
     @media (max-width:991.98px) {
