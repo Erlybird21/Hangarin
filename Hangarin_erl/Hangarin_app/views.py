@@ -108,7 +108,7 @@ class CategoryDeleteView(DeleteView):
 
 class PriorityListView(ListView):
     model = Priority
-    template_name = 'priority_list.html'
+    template_name = 'Priority_List.html'
     context_object_name = 'priorities'
     paginate_by = 20
 
@@ -221,3 +221,4 @@ class NoteDeleteView(DeleteView):
     template_name = 'Notes_Delete.html'
     success_url = reverse_lazy('note-list')
 
+# test comment for commit later
