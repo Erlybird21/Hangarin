@@ -16,9 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from Hangarin_app import views
-from Hangarin_app.views import DashboardView
+from Hangarin_app.views import DashboardView, TaskListView, CategoryListView, PriorityListView, SubTaskListView, NoteListView, TaskCreateView, TaskUpdateView, TaskDeleteView, CategoryCreateView, CategoryUpdateView, CategoryDeleteView,PriorityCreateView, PriorityUpdateView, PriorityDeleteView, SubTaskCreateView, SubTaskUpdateView, SubTaskDeleteView,NoteCreateView, NoteUpdateView, NoteDeleteView
 from django.urls import path, include
-from django.urls import path
 
 # """
 # URL configuration for Hangarin_main project.
@@ -40,7 +39,7 @@ from django.urls import path
 urlpatterns = [
     path('admin/', admin.site.urls),
     # path('', include('pwa.urls')), # install pwa later, then disable the comments
-    # path("accounts/", include("allauth.urls")), # install allauth later, then disable the comments
+    path("accounts/", include("allauth.urls")), # install allauth later, then disable the comments
     path("", DashboardView.as_view(), name="dashboard"),
     # For my tasks in url
     path('tasks/', views.TaskListView.as_view(), name='task-list'),
