@@ -137,7 +137,7 @@ class PriorityDeleteView(DeleteView):
 
 class SubTaskListView(ListView):
     model = SubTask
-    template_name = "Subtask_List.html"
+    template_name = "SubTask_List.html"
     context_object_name = "subtasks"
     paginate_by = 10
 
