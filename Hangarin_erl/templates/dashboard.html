@@ -1,52 +1,49 @@
 {% extends 'base.html' %}
 {% block title %}Hangarin | Dashboard{% endblock %}
 {% block content %}
-<div class="container-fluid px-4 mt-4">
 
-  <h4 class="mb-4 fw-semibold">Welcome back, {{ request.user.username|default:"User" }} 👋</h4>
+<div class="container-fluid">
+  <h4 class="fw-semibold mb-4">Welcome back, {{ request.user.username|default:"NaN" }} 👋</h4>
 
-  <div class="row g-3">
+  <div class="row g-3 mb-4">
     <div class="col-md-3">
-      <div class="card shadow-sm border-0 bg-light-primary">
+      <div class="card border-0 shadow-sm bg-light-primary">
         <div class="card-body">
-          <p class="mb-1 fw-semibold text-muted">Total Tasks</p>
+          <p class="text-muted small mb-1">Total Tasks</p>
           <h4 class="fw-bold text-dark">{{ total_tasks }}</h4>
         </div>
       </div>
     </div>
     <div class="col-md-3">
-      <div class="card shadow-sm border-0 bg-light-warning">
+      <div class="card border-0 shadow-sm bg-light-warning">
         <div class="card-body">
-          <p class="mb-1 fw-semibold text-muted">Pending</p>
+          <p class="text-muted small mb-1">Pending</p>
           <h4 class="fw-bold text-dark">{{ pending_tasks }}</h4>
         </div>
       </div>
     </div>
     <div class="col-md-3">
-      <div class="card shadow-sm border-0 bg-light-info">
+      <div class="card border-0 shadow-sm bg-light-info">
         <div class="card-body">
-          <p class="mb-1 fw-semibold text-muted">Completed</p>
+          <p class="text-muted small mb-1">Completed</p>
           <h4 class="fw-bold text-dark">{{ completed_tasks }}</h4>
         </div>
       </div>
     </div>
     <div class="col-md-3">
-      <div class="card shadow-sm border-0 bg-light-danger">
+      <div class="card border-0 shadow-sm bg-light-danger">
         <div class="card-body">
-          <p class="mb-1 fw-semibold text-muted">Overdue</p>
+          <p class="text-muted small mb-1">Overdue</p>
           <h4 class="fw-bold text-dark">{{ overdue_tasks }}</h4>
         </div>
       </div>
     </div>
   </div>
 
-  <hr class="my-4">
-
-  <!-- Optional: recent tasks preview -->
   <h5 class="fw-semibold mb-3">Recent Tasks</h5>
-  <div class="table-responsive">
-    <table class="table table-hover align-middle">
-      <thead>
+  <div class="table-responsive bg-white rounded shadow-sm">
+    <table class="table table-hover align-middle mb-0">
+      <thead class="table-light">
         <tr>
           <th>Title</th>
           <th>Category</th>
@@ -57,25 +54,28 @@
       </thead>
       <tbody>
         {% for task in recent_tasks %}
-          <tr>
-            <td>{{ task.title }}</td>
-            <td>{{ task.category.name }}</td>
-            <td>{{ task.priority.name }}</td>
-            <td>
-              <span class="badge 
-                {% if task.status == 'completed' %}bg-success
-                {% elif task.status == 'in_progress' %}bg-info
-                {% else %}bg-warning{% endif %}">
-                {{ task.get_status_display }}
-              </span>
-            </td>
-            <td>{{ task.deadline|date:"M d, Y H:i" }}</td>
-          </tr>
+        <tr>
+          <td>{{ task.title }}</td>
+          <td>{{ task.category.name }}</td>
+          <td>{{ task.priority.name }}</td>
+          <td>
+            <span class="badge 
+              {% if task.status == 'completed' %} bg-success
+              {% elif task.status == 'in_progress' %} bg-info
+              {% else %} bg-warning {% endif %}">
+              {{ task.get_status_display }}
+            </span>
+          </td>
+          <td>{{ task.deadline|date:"M d, Y H:i" }}</td>
+        </tr>
         {% empty %}
-          <tr><td colspan="5" class="text-center text-muted">No recent tasks</td></tr>
+        <tr>
+          <td colspan="5" class="text-center text-muted">No recent tasks</td>
+        </tr>
         {% endfor %}
       </tbody>
     </table>
   </div>
 </div>
+
 {% endblock %}
