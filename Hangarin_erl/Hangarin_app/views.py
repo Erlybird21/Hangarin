@@ -6,6 +6,7 @@ from django.urls import reverse_lazy
 from .models import Task, Category, Priority, SubTask, Note
 from .forms import TaskForm
 from django import forms
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 # --------------------------
@@ -13,7 +14,7 @@ from django import forms
 # --------------------------
 
 
-class DashboardView(TemplateView):
+class DashboardView(LoginRequiredMixin, TemplateView):
     template_name = 'dashboard.html'
 
     def get_context_data(self, **kwargs):
