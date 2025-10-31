@@ -1,0 +1,68 @@
+{% load static i18n account socialaccount %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hangarin | Confirm Sign In</title>
+
+  <!-- Favicon + CSS -->
+  <link rel="shortcut icon" type="image/png" href="{% static 'images/logos/favicon.png' %}" />
+  <link rel="stylesheet" href="{% static 'css/styles.min.css' %}" />
+
+  <style>
+    body {
+      background: radial-gradient(circle at top left, #eef3ff, #ffffff);
+      font-family: "Inter", sans-serif;
+    }
+    .card {
+      border: none;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    }
+    .btn-outline-secondary {
+      border-color: #d0d0d0;
+      color: #555;
+      transition: all 0.2s ease;
+    }
+    .btn-outline-secondary:hover {
+      background-color: #5D87FF;
+      color: #fff;
+      border-color: #5D87FF;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page-wrapper d-flex align-items-center justify-content-center min-vh-100">
+    <div class="card shadow-lg border-0" style="max-width: 420px;">
+      <div class="card-body p-4 text-center">
+
+        <a href="{% url 'dashboard' %}" class="text-nowrap logo-img d-block mb-3">
+          <img src="{% static 'images/logos/dark-logo.svg' %}" width="180" alt="Hangarin Logo">
+        </a>
+
+        <h4 class="fw-bold mb-3">Confirm Sign In</h4>
+        <p class="text-muted mb-4">
+          You’re about to sign in using your <strong>{{ provider.name }}</strong> account.
+        </p>
+
+        <form method="post">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-primary w-100 mb-3">
+            Continue with {{ provider.name }}
+          </button>
+        </form>
+
+        <a href="{% url 'account_login' %}" class="btn btn-outline-secondary w-100">
+          Cancel
+        </a>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="{% static 'libs/jquery/dist/jquery.min.js' %}"></script>
+  <script src="{% static 'libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

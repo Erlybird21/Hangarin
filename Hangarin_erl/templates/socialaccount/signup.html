@@ -1,0 +1,100 @@
+{% load static i18n account socialaccount widget_tweaks %}
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hangarin | Complete Sign Up</title>
+
+  <link rel="shortcut icon" type="image/png" href="{% static 'images/logos/favicon.png' %}" />
+  <link rel="stylesheet" href="{% static 'css/styles.min.css' %}" />
+
+  <style>
+    body {
+      background: radial-gradient(circle at top left, #eef3ff, #ffffff);
+      font-family: "Inter", sans-serif;
+    }
+    .card {
+      border: none;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    }
+    input[type="text"], input[type="email"], input[type="password"] {
+      border-radius: 10px;
+      padding: 10px 14px;
+      border: 1px solid #d6d9e0;
+      width: 100%;
+      transition: border-color 0.2s ease;
+    }
+    input:focus {
+      border-color: #5D87FF;
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(93, 135, 255, 0.2);
+    }
+    .text-danger {
+      font-size: 0.875rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="min-vh-100 d-flex align-items-center justify-content-center">
+    <div class="card p-5 text-center" style="max-width: 420px;">
+      <img src="{% static 'images/logos/dark-logo.svg' %}" width="160" class="mb-3" alt="Hangarin Logo">
+      <h3 class="fw-bold mb-2">Complete Your Sign Up</h3>
+      <p class="text-muted mb-4">
+        You’re almost done! Just confirm your details to finish signing in with <strong>{{ provider.name }}</strong>.
+      </p>
+
+      <!-- Display non-field errors -->
+      {% if form.non_field_errors %}
+        <div class="alert alert-danger">
+          {% for error in form.non_field_errors %}
+            <div>{{ error }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <form method="post" action="{% url 'socialaccount_signup' %}">
+        {% csrf_token %}
+
+        <!-- Username field -->
+        <div class="mb-3 text-start">
+          <label for="id_username" class="form-label fw-semibold">Username</label>
+          {{ form.username|add_class:"form-control" }}
+          {% if form.username.errors %}
+            {% for error in form.username.errors %}
+              <div class="text-danger">{{ error }}</div>
+            {% endfor %}
+          {% endif %}
+        </div>
+
+        <!-- Email field -->
+        {% if form.email %}
+        <div class="mb-3 text-start">
+          <label for="id_email" class="form-label fw-semibold">Email</label>
+          {{ form.email|add_class:"form-control" }}
+          {% if form.email.errors %}
+            {% for error in form.email.errors %}
+              <div class="text-danger">{{ error }}</div>
+            {% endfor %}
+          {% endif %}
+        </div>
+        {% endif %}
+
+        <button type="submit" class="btn btn-primary w-100 py-2 fs-5 mb-2 rounded-2">
+          Finish Sign Up
+        </button>
+      </form>
+
+      <div class="text-center mt-4">
+        <a href="{% url 'account_login' %}" class="text-primary fw-bold">Back to Sign In</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="{% static 'libs/jquery/dist/jquery.min.js' %}"></script>
+  <script src="{% static 'libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>
