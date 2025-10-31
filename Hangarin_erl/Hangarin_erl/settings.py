@@ -153,3 +153,5 @@ ACCOUNT_SIGNUP_FIELDS = [
 "password1*",
 "password2*",
 ]
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
