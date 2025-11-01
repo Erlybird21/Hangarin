@@ -10,6 +10,11 @@
   <link rel="shortcut icon" type="image/png" href="{% static 'images/logos/favicon.png' %}" />
   <link rel="stylesheet" href="{% static 'css/styles.min.css' %}" />
 
+  % load pwa %}
+  {% progressive_web_app_meta %}
+  <link rel="manifest" href="{% static 'manifest.json' %}">
+  <meta name="theme-color" content="#0A0A0A" />
+  <link rel="apple-touch-icon" href="{% static 'images/icons/icon-192.png' %}">
   <style>
     body {
       background: radial-gradient(circle at top left, #eef3ff, #ffffff);
@@ -64,5 +69,15 @@
 
   <script src="{% static 'libs/jquery/dist/jquery.min.js' %}"></script>
   <script src="{% static 'libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+    <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", function () {
+        navigator.serviceWorker
+          .register("{% url 'serviceworker' %}", { scope: "/" })
+          .then(reg => console.log("✅ SW active on login:", reg.scope))
+          .catch(err => console.error("❌ SW failed on login:", err));
+      });
+    }
+  </script>
 </body>
 </html>

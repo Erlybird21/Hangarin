@@ -1,15 +1,19 @@
-{% load static %}
-{% load socialaccount %}
-
+{% load static socialaccount pwa %}
 <!doctype html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Hangarin</title>
 
-  <link rel="shortcut icon" href="{% static '/images/logos/favicon.png' %}" />
+  <!-- ✅ Progressive Web App -->
+  {% progressive_web_app_meta %}
+  <link rel="manifest" href="{% static 'manifest.json' %}">
+  <meta name="theme-color" content="#0A0A0A" />
+  <link rel="apple-touch-icon" href="{% static 'images/icons/icon-192.png' %}">
+
+  <!-- Favicon + CSS -->
+  <link rel="shortcut icon" href="{% static 'images/logos/favicon.png' %}" />
   <link rel="stylesheet" href="{% static 'css/styles.min.css' %}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
@@ -122,5 +126,16 @@
   <script src="{% static 'assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
   <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.8/dist/iconify-icon.min.js"></script>
 
+  <!-- ✅ Auto service worker registration -->
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("/serviceworker.js", { scope: "/" })
+      .then(reg => console.log("✅ ServiceWorker registered:", reg.scope))
+      .catch(err => console.error("❌ SW registration failed:", err));
+  });
+}
+</script>
 </body>
 </html>
